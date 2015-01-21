@@ -1,0 +1,7 @@
+from sklearn import preprocessing
+import numpy as np
+
+data_right = np.loadtxt('right.csv', delimiter=',')
+data_left = np.loadtxt('left.csv', delimiter=',')
+
+print(data_right)
