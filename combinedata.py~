@@ -1,7 +1,0 @@
-import csv
-
-data = np.loadtxt('test.csv', delimiter=',')
-
-with open('rightdata.csv', 'w', newline='') as fp:
-    a = csv.writer(fp, delimiter=',')
-    a.writerows(data)
