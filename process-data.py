@@ -4,7 +4,7 @@ import numpy as np
 from sklearn import preprocessing, svm
 import matplotlib.pyplot as plt
 
-ser = serial.Serial('/dev/ttyUSB0', 9600, timeout=2)
+ser = serial.Serial('/dev/ttyUSB1', 9600, timeout=3)
 data = []
 
 def hist(data, n=128, m=255):
@@ -28,7 +28,7 @@ def hist(data, n=128, m=255):
 for i in range(1,51):
 	total = []
 	try:
-		print("Listening for swipe for 2 seconds..")
+		print("Listening for gesture for 3 seconds..")
 		for line in ser:
 			line = line.decode()
 			line = line.split(' ')
@@ -54,7 +54,7 @@ for i in range(1,51):
 		data.append(result)
 		print("Stored result: " + str(i))
 
-with open('2finger-swipe-up-50.csv', 'w', newline='') as fp:
+with open('near-50.csv', 'w', newline='') as fp:
     a = csv.writer(fp, delimiter=',')
     a.writerows(data)
 

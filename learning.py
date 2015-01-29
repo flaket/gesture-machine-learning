@@ -5,17 +5,29 @@ from sklearn import preprocessing, svm, cross_validation
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.cluster import KMeans 
 
-X = np.loadtxt('combined-2finger-sf-lr-50.csv', delimiter=',')
+X = np.loadtxt('f-n-us-uf-ds-df-ls-lf-rs-rf-500.csv', delimiter=',')
 y = []
 
 for i in range(50):
-	y.append("swipe-left")
+	y.append("far")
 for i in range(50):
-	y.append("swipe-rigth")
+	y.append("near")
 for i in range(50):
-	y.append("flick-left")
+	y.append("up-swipe")
 for i in range(50):
-	y.append("flick-rigth")
+	y.append("up-flick")
+for i in range(50):
+	y.append("down-swipe")
+for i in range(50):
+	y.append("down-flick")
+for i in range(50):
+	y.append("left-swipe")
+for i in range(50):
+	y.append("left-flick")
+for i in range(50):
+	y.append("right-swipe")
+for i in range(50):
+	y.append("rigth-flick")
 
 print("#Data samples: " + str(len(X)))
 
@@ -27,5 +39,5 @@ print("SVC-linear: " + str(svc_lin.score(X_test, y_test)))
 svc = svm.SVC(C=1.0, kernel='poly').fit(X_train, y_train)
 print("SVC-poly:   " + str(svc.score(X_test, y_test)))
 
-neigh = KNeighborsClassifier(n_neighbors=2, weights='uniform', p=10).fit(X_train, y_train)
+neigh = KNeighborsClassifier(n_neighbors=3, weights='uniform').fit(X_train, y_train)
 print("KNeighbors: " + str(neigh.score(X_test, y_test)))
