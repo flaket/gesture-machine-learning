@@ -1,11 +1,8 @@
-import csv
-import serial
 import numpy as np
 from sklearn import preprocessing, svm, cross_validation
 from sklearn.neighbors import KNeighborsClassifier
-from sklearn.cluster import KMeans 
 
-X = np.loadtxt('f-n-us-uf-ds-df-ls-lf-rs-rf-500.csv', delimiter=',')
+X = np.loadtxt('data/f-n-us-uf-ds-df-ls-lf-rs-rf-500.csv', delimiter=',')
 y = []
 
 for i in range(50):
