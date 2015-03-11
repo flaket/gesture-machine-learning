@@ -10,7 +10,7 @@ X = np.loadtxt('data/500.csv', delimiter=',')
 X = preprocessing.scale(X)
 y = []
 samples_per_label = 50
-loops = 1
+loops = 10
 
 
 def create_labels():
@@ -55,11 +55,14 @@ def classify():
 
             svc_lin = svm.LinearSVC().fit(X_train, y_train)
             svc_lin_score = svc_lin_score + svc_lin.score(X_test, y_test)
+
             svc = svm.SVC(kernel='linear').fit(X_train, y_train)
             svc_score = svc_score + svc.score(X_test, y_test)
+
             logisticRegression = LogisticRegression().fit(X_train, y_train)
             logisticRegression_score = logisticRegression_score + logisticRegression.score(X_test, y_test)
 
+            '''
             kNeighbors = KNeighborsClassifier().fit(X_train, y_train)
             kNeighbors_score = kNeighbors_score + kNeighbors.score(X_test, y_test)
             decisionTree = DecisionTreeClassifier().fit(X_train, y_train)
@@ -72,17 +75,19 @@ def classify():
             gradientBoosting_score = gradientBoosting_score + gradientBoosting.score(X_test, y_test)
             bagging = BaggingClassifier().fit(X_train, y_train)
             bagging_score = bagging_score + bagging.score(X_test, y_test)
+            '''
 
         results.append([str(svc_lin_score / loops), "Linear-SVC"])
         results.append([str(svc_score / loops), "SVC"])
         results.append([str(logisticRegression_score / loops), "LogisticRegression"])
+        '''
         results.append([str(kNeighbors_score / loops), "KNeighbors"])
         results.append([str(decisionTree_score / loops), "DecisionTree"])
         results.append([str(randomForest_score / loops), "RandomForest"])
         results.append([str(extraTrees_score / loops), "ExtraTrees"])
         results.append([str(bagging_score / loops), "Bagging"])
         results.append([str(gradientBoosting_score / loops), "GradientBoosting"])
-
+        '''
         results.sort(reverse=True)
         return results
     return "Mismatch in #data samples in data set X and #labels in y"

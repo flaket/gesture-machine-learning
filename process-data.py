@@ -5,10 +5,10 @@ import matplotlib.pyplot as plt
 
 time_out = 3
 baud_rate = 9600
-port = '/dev/ttyUSB1'
+port = '/dev/tty.usbserial-A6026OJT'
 data = []
-samples = 50
-output_filename = 'near-50.csv'
+samples = 1
+output_filename = 'test.csv'
 
 
 def trim_data(d, n=128, m=255):
@@ -52,7 +52,7 @@ def listen_for_gestures():
     for n in range(0, samples):
         total = []
         try:
-            print("Listening for gesture for " + time_out + " seconds..")
+            print("Listening for gesture for " + str(time_out) + " seconds..")
             for line in ser:
                 line = line.decode()
                 line = line.split(' ')
@@ -61,7 +61,11 @@ def listen_for_gestures():
                 total = total + values
         except serial.SerialException:
             print('caught SerialException!')
-        sensor1, sensor2, sensor3, sensor4 = []
+        print(total)
+        sensor1 = []
+        sensor2 = []
+        sensor3 = []
+        sensor4 = []
         for j in range(0, len(total), 4):
             sensor1.append(total[j+0])
             sensor2.append(total[j+1])
@@ -72,18 +76,20 @@ def listen_for_gestures():
         sensor1.extend(sensor2)
         if len(sensor1) > 0:
             data.append(trim_data(sensor1))
-            print("Stored result: {0}".format(str(n + 1)))
+            print("Stored result to memory: {0}".format(str(n + 1)))
 
 
 def save_data():
     with open(output_filename, 'w', newline='') as fp:
         a = csv.writer(fp, delimiter=',')
         a.writerows(data)
+    print("Stored " + len(data) + " data samples to file: " + output_filename)
 
 
-def plot(result):
-    plt.bar(np.arange(128), tuple(result))
+def plot(d):
+    plt.bar(np.arange(128), tuple(d))
     plt.show()
 
 if __name__ == '__main__':
-    test_trim_data()
+    listen_for_gestures()
+    print(data)
