@@ -3,13 +3,14 @@ import csv
 import numpy as np
 import matplotlib.pyplot as plt
 
+from learning import *
+
 time_out = 3
 baud_rate = 9600
-port = '/dev/tty.usbserial-A6026OJT'
+port = '/dev/cu.usbmodem1411'
 data = []
-samples = 1
+samples = 5
 output_filename = 'test.csv'
-
 
 def trim_data(d, n=128, m=255):
     """
@@ -61,7 +62,6 @@ def listen_for_gestures():
                 total = total + values
         except serial.SerialException:
             print('caught SerialException!')
-        print(total)
         sensor1 = []
         sensor2 = []
         sensor3 = []
@@ -75,9 +75,19 @@ def listen_for_gestures():
         sensor2.extend(sensor3)
         sensor1.extend(sensor2)
         if len(sensor1) > 0:
-            data.append(trim_data(sensor1))
-            print("Stored result to memory: {0}".format(str(n + 1)))
+            sensor1 = map(float, sensor1)
+            sensor1 = trim_data(sensor1)
+            #store_to_memory(sensor1, n)
+            online_classify(sensor1)
+    ser.close()
 
+def online_classify(d):
+    prediction = svc.predict(d)
+    print(prediction)
+
+def store_to_memory(sensor1, n):
+    data.append(sensor1)
+    print("Stored result to memory: {0}".format(str(n + 1)))
 
 def save_data():
     with open(output_filename, 'w', newline='') as fp:
@@ -85,11 +95,17 @@ def save_data():
         a.writerows(data)
     print("Stored " + len(data) + " data samples to file: " + output_filename)
 
+def train_classifier():
+    create_labels()
+    X_train, X_test, y_train, y_test = cross_validation.train_test_split(X, y, test_size=0.25)
+    global svc
+    svc = svm.SVC(kernel='linear').fit(X_train, y_train)
 
 def plot(d):
     plt.bar(np.arange(128), tuple(d))
     plt.show()
 
 if __name__ == '__main__':
-    listen_for_gestures()
-    print(data)
+    test_trim_data()
+    #train_classifier()
+    #listen_for_gestures()
